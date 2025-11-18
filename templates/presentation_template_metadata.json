@@ -1,0 +1,16 @@
+{
+  "template_id": "presentation_template",
+  "template_name": "presentation-template.pptx",
+  "template_path": "presentation-template.pptx",
+  "slide_width_inches": 10.0,
+  "slide_height_inches": 5.625,
+  "layouts": [
+    {
+      "layout_id": "layout_0",
+      "layout_index": 0,
+      "layout_name": "DEFAULT",
+      "slots": {},
+      "total_shapes": 0
+    }
+  ]
+}
