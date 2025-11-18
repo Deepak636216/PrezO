@@ -41,7 +41,9 @@ def analyze_ppt_template(template_file_path: str) -> Dict[str, Any]:
         "template_path": template_file_path,
         "slide_width_inches": prs.slide_width.inches,
         "slide_height_inches": prs.slide_height.inches,
-        "layouts": []
+        "total_slides": len(prs.slides),
+        "layouts": [],
+        "available_slide_types": []
     }
 
     # Extract each layout
@@ -78,7 +80,55 @@ def analyze_ppt_template(template_file_path: str) -> Dict[str, Any]:
 
         metadata["layouts"].append(layout_info)
 
+    # Extract sample slide types from existing slides
+    slide_types = []
+    sample_slides = list(prs.slides)[:5]  # Analyze first 5 slides
+
+    for idx, slide in enumerate(sample_slides):
+        slide_type_info = {
+            "sample_slide_index": idx,
+            "description": _classify_slide_type(slide),
+            "shape_count": len(slide.shapes)
+        }
+        slide_types.append(slide_type_info)
+
+    metadata["available_slide_types"] = slide_types
+
     return metadata
+
+
+def _classify_slide_type(slide) -> str:
+    """Classify slide type based on content"""
+    shapes = list(slide.shapes)
+
+    # Count text shapes with content
+    text_shapes = [s for s in shapes if hasattr(s, 'text') and s.text.strip()]
+
+    if not text_shapes:
+        return "Background/Design slide"
+
+    # Check for large title text
+    for shape in text_shapes:
+        if hasattr(shape, 'text_frame'):
+            for para in shape.text_frame.paragraphs:
+                if para.runs:
+                    font_size = para.runs[0].font.size
+                    if font_size and font_size > 400000:  # Large font (>30pt)
+                        if any(keyword in shape.text.lower() for keyword in ['title', 'presentation']):
+                            return "Title slide"
+                        else:
+                            return "Section header slide"
+
+    # Check for numbered sections
+    for shape in text_shapes:
+        if shape.text.strip() in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']:
+            return "Section divider slide"
+
+    # If multiple text shapes, likely content
+    if len(text_shapes) >= 3:
+        return "Content slide (multi-paragraph)"
+
+    return "Content slide"
 
 
 def generate_template_functions(template_metadata: Dict[str, Any], output_dir: str = "templates") -> str:

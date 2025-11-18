@@ -4,6 +4,7 @@
   "template_path": "presentation-template.pptx",
   "slide_width_inches": 10.0,
   "slide_height_inches": 5.625,
+  "total_slides": 10,
   "layouts": [
     {
       "layout_id": "layout_0",
@@ -11,6 +12,33 @@
       "layout_name": "DEFAULT",
       "slots": {},
       "total_shapes": 0
+    }
+  ],
+  "available_slide_types": [
+    {
+      "sample_slide_index": 0,
+      "description": "Title slide",
+      "shape_count": 5
+    },
+    {
+      "sample_slide_index": 1,
+      "description": "Section header slide",
+      "shape_count": 4
+    },
+    {
+      "sample_slide_index": 2,
+      "description": "Content slide (multi-paragraph)",
+      "shape_count": 6
+    },
+    {
+      "sample_slide_index": 3,
+      "description": "Content slide (multi-paragraph)",
+      "shape_count": 9
+    },
+    {
+      "sample_slide_index": 4,
+      "description": "Content slide (multi-paragraph)",
+      "shape_count": 18
     }
   ]
 }
